@@ -51,7 +51,7 @@ fn main() -> Result<(), Error> {
             (header, commands)
         }
         None => {
-            if atty::is(Stream::Stdin) {
+            if atty::isnt(Stream::Stdin) {
                 let mut parser = vcd::Parser::new(stdin());
                 let header = parser.parse_header()?;
                 let commands = parser.collect::<Vec<_>>();
