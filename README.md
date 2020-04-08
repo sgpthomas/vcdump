@@ -1,4 +1,8 @@
-# Vcdump
+# Vcdump [![latest]][crate]
+
+[latest]: https://img.shields.io/crates/v/vcdump.svg
+[crate]: https://crates.io/crates/vcdump
+
 A simple tool to convert vcd [Value Change Dump](https://en.wikipedia.org/wiki/Value_change_dump) files into [json](https://en.wikipedia.org/wiki/JSON) files. The motivation for this is to
 allow vcd files to be better integrated into normal Unix command line workflows.
 
