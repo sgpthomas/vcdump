@@ -245,7 +245,7 @@ checksum = "45fe67e00cce82411eeed416bb22a7922ed6bc00df8b6de0ab63a08b281995ec"
 
 [[package]]
 name = "vcdump"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "atty",
  "serde",

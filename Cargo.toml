@@ -1,10 +1,11 @@
 [package]
 description = "Simple tool to convert vcd files to json files so that you can use all your favorite command line tools to view the output of your vcd files."
+repository = "https://github.com/sgpthomas/vcdump"
 readme = "README.md"
 license = "MIT"
 keywords = ["vcd", "json", "cli"]
 name = "vcdump"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Samuel Thomas <sgpthomas@gmail.com>"]
 edition = "2018"
 
