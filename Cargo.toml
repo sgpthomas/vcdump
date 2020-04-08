@@ -1,10 +1,12 @@
 [package]
+description = "Simple tool to convert vcd files to json files so that you can use all your favorite command line tools to view the output of your vcd files."
+readme = "README.md"
+license = "MIT"
+keywords = ["vcd", "json", "cli"]
 name = "vcdump"
 version = "0.1.0"
 authors = ["Samuel Thomas <sgpthomas@gmail.com>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 vcd = "0.5.0"
