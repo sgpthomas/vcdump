@@ -26,7 +26,7 @@ fn to_bitstring(vals: &[Value]) -> String {
     res
 }
 
-// Definition of the command line interface. Uses the `structopt` derive macro
+/// Simple tool to convert vcd files into json files.
 #[derive(StructOpt, Debug)]
 #[structopt(
     name = env!("CARGO_PKG_NAME"),
