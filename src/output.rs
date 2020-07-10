@@ -4,18 +4,18 @@ use serde::Serializer;
 use std::collections::BTreeMap;
 
 #[derive(Debug, Clone)]
-pub enum Output {
-    Scope(BTreeMap<String, Output>),
-    Timeseries(Vec<u64>),
+pub enum Output<V> {
+    Scope(BTreeMap<String, Output<V>>),
+    Timeseries(Vec<V>),
 }
 
-impl Default for Output {
+impl<V> Default for Output<V> {
     fn default() -> Self {
         Output::Scope(BTreeMap::new())
     }
 }
 
-impl Serialize for Output {
+impl<V: Serialize> Serialize for Output<V> {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
@@ -27,8 +27,8 @@ impl Serialize for Output {
     }
 }
 
-impl Output {
-    pub fn insert(&mut self, path: Path<String>, series: &[u64]) {
+impl<V: Clone> Output<V> {
+    pub fn insert(&mut self, path: Path<String>, series: Vec<V>) {
         let mut out = self;
         for name in path.to_vec() {
             match out {
@@ -40,6 +40,6 @@ impl Output {
                 Output::Timeseries(..) => panic!("bad boy"),
             }
         }
-        *out = Output::Timeseries(series.to_vec())
+        *out = Output::Timeseries(series)
     }
 }
