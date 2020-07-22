@@ -62,7 +62,7 @@ impl<V: ValueType> Map<V> {
             item.code,
             MapItemList {
                 values: vec![],
-                item: item.clone(),
+                item: Rc::clone(&item),
             },
         );
         self.paths.insert(path, item);

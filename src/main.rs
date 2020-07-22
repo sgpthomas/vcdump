@@ -170,10 +170,10 @@ fn process<V: ValueType>(opts: Opts) -> Result<(), Error> {
 
     let mut output = Output::default();
 
-    let Map { mut items, paths } = map;
+    let Map { items, paths } = map;
 
     for (path, var) in paths {
-        output.insert(path, items.remove(&var.code).unwrap().values);
+        output.insert(path, &items.get(&var.code).unwrap().values);
     }
     if opts.pretty || atty::is(Stream::Stdout) {
         let s = serde_json::to_string_pretty(&output)?;

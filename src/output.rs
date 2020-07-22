@@ -28,7 +28,7 @@ impl<V: Serialize> Serialize for Output<V> {
 }
 
 impl<V: Clone> Output<V> {
-    pub fn insert(&mut self, path: Path<String>, series: Vec<V>) {
+    pub fn insert(&mut self, path: Path<String>, series: &[V]) {
         let mut out = self;
         for name in path.to_vec() {
             match out {
@@ -40,6 +40,6 @@ impl<V: Clone> Output<V> {
                 Output::Timeseries(..) => panic!("bad boy"),
             }
         }
-        *out = Output::Timeseries(series)
+        *out = Output::Timeseries(series.to_vec())
     }
 }
