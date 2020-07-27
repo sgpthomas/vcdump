@@ -1,16 +1,30 @@
 use crate::errors::Error;
 use crate::path::Path;
+use crate::ValueType;
 use std::collections::HashMap;
 use std::rc::Rc;
 use vcd::{Header, IdCode, ScopeItem, Var};
 
-#[derive(Default)]
-pub struct Map {
-    pub paths: HashMap<Path<String>, Var>,
-    pub items: HashMap<IdCode, Vec<u64>>,
+pub struct MapItemList<V> {
+    pub values: Vec<V>,
+    pub item: Rc<Var>,
 }
 
-impl Map {
+pub struct Map<V> {
+    pub paths: HashMap<Path<String>, Rc<Var>>,
+    pub items: HashMap<IdCode, MapItemList<V>>,
+}
+
+impl<V> Default for Map<V> {
+    fn default() -> Self {
+        Self {
+            paths: Default::default(),
+            items: Default::default(),
+        }
+    }
+}
+
+impl<V: ValueType> Map<V> {
     pub fn new(header: Header) -> Self {
         let mut map = Self::default();
         for item in header.items {
@@ -43,32 +57,37 @@ impl Map {
         if self.paths.contains_key(&path) {
             panic!("oh no!")
         }
-        self.items.insert(item.code, vec![]);
+        let item = Rc::new(item);
+        self.items.insert(
+            item.code,
+            MapItemList {
+                values: vec![],
+                item: Rc::clone(&item),
+            },
+        );
         self.paths.insert(path, item);
     }
 
-    pub fn change_value(
-        &mut self,
-        id: IdCode,
-        value: u64,
-    ) -> Result<(), Error> {
-        self.items.get_mut(&id).and_then(|x| x.last_mut()).map_or(
-            Err(Error::ChangeValue),
-            |last| {
+    pub fn change_value(&mut self, id: IdCode, value: V) -> Result<(), Error> {
+        self.items
+            .get_mut(&id)
+            .and_then(|x| x.values.last_mut())
+            .map_or(Err(Error::ChangeValue), |last| {
                 *last = value;
                 Ok(())
-            },
-        )
+            })
     }
 
     pub fn push_timestep(&mut self) {
-        for (_, item) in self.items.iter_mut() {
-            match item.last() {
+        for (_, item_list) in self.items.iter_mut() {
+            match item_list.values.last() {
                 Some(last) => {
-                    let el = *last;
-                    item.push(el)
+                    let el = last.clone();
+                    item_list.values.push(el);
                 }
-                None => item.push(0),
+                None => {
+                    item_list.values.push(V::empty(&item_list.item));
+                }
             }
         }
     }
