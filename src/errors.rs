@@ -1,4 +1,3 @@
-#[derive(Debug)]
 pub enum Error {
     JsonError(serde_json::error::Error),
     NoFile,
@@ -22,5 +21,14 @@ impl From<std::io::Error> for Error {
 impl From<std::num::ParseIntError> for Error {
     fn from(err: std::num::ParseIntError) -> Self {
         Error::ParseIntError(err)
+    }
+}
+
+impl std::fmt::Debug for Error {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            Error::IoError(e) => write!(f, "{:?}", e.kind()),
+            x => write!(f, "{:#?}", x),
+        }
     }
 }
